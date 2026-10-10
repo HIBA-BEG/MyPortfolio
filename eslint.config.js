@@ -25,4 +25,11 @@ export default tseslint.config(
       ],
     },
   },
+  {
+    // theme.tsx and i18n.tsx export the provider and the hook from the same file
+    files: ['src/theme.tsx', 'src/i18n.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 )

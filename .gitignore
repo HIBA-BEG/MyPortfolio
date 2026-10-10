@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+*.tsbuildinfo
 
 # Editor directories and files
 .vscode/*
@@ -27,3 +28,6 @@ dist-ssr
 .env
 .env.local
 .env.*.local
+
+./public/hiba.jpg
+./public/hiba2.png
