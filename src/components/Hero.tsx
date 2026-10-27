@@ -34,16 +34,15 @@ const Hero = () => {
   const years = useCount(1.5, statsInView, 1);
   const projects = useCount(repoCount ?? 0, statsInView && repoCount !== null);
 
-  // live public repo count. 43 is what I had when github was down or rate-limited
   useEffect(() => {
     let cancelled = false;
-    fetch('https://api.github.com/users/HIBA-BEG')
+    fetch('/api/repos')
       .then((response) => {
         if (!response.ok) throw new Error(String(response.status));
         return response.json();
       })
-      .then((data: { public_repos?: number }) => {
-        if (!cancelled) setRepoCount(typeof data.public_repos === 'number' ? data.public_repos : 43);
+      .then((data: { total?: number }) => {
+        if (!cancelled) setRepoCount(typeof data.total === 'number' ? data.total : 43);
       })
       .catch(() => {
         if (!cancelled) setRepoCount(43);
@@ -101,10 +100,10 @@ const Hero = () => {
               <p className="text-2xl font-bold text-[var(--text)]">{repoCount === null ? '—' : projects}</p>
               <p className="text-sm text-[var(--muted)]">{copy.hero.repos}</p>
             </div>
-            <div>
+            {/* <div>
               <p className="text-2xl font-bold text-[var(--text)]">QA</p>
               <p className="text-sm text-[var(--muted)]">{copy.hero.dev}</p>
-            </div>
+            </div> */}
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">

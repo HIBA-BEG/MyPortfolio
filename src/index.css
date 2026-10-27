@@ -71,7 +71,7 @@ section {
   border-color: rgba(190, 242, 100, 0.55);
 }
 
-/* cyan and lime were too pale on white */
+/* accent and chip colors for light mode */
 :root[data-theme='light'] .accent-cyan,
 :root[data-theme='light'] .chip-cyan {
   color: #0e7490;

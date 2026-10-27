@@ -1,21 +1,75 @@
+import { useCallback, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useI18n, type ProjectId } from '../i18n';
+import { useI18n, type Copy, type ProjectId } from '../i18n';
+import ProjectModal, { type ProjectDialog } from './ProjectModal';
 
 type ExtraLabel = 'client' | 'server' | 'api';
+
+type DemoLogin = {
+  label: string;
+  email: string;
+  password: string;
+};
 
 type Project = {
   id: ProjectId;
   title: string;
   year?: string;
   technologies: string[];
-  github: string;
+  github?: string;
   extra?: { label: ExtraLabel; href: string };
+  demo?: string;
+  images?: string[];
+  demoAccounts?: DemoLogin[];
+  guestHint?: boolean;
 };
 
-// blurbs are in i18n. no live demo until I deploy one and add the url here
-// these repo names look wrong but they match github, don't rename them:
+// repo names match github
 // WatchM3aya-Sever (missing r), CinManager-Client (missing e), CineManager-Mobile- (trailing dash)
 const projects: Project[] = [
+  {
+    id: 'maisonNoire',
+    title: 'Maison Noire',
+    year: '2026',
+    technologies: ['Vite', 'React', 'TypeScript', 'Tailwind CSS', 'framer-motion'],
+    demo: 'https://maison-noire-restaurant.vercel.app',
+    images: ['/projects/maison-noire/01.png', '/projects/maison-noire/02.png'],
+  },
+  {
+    id: 'darZitoun',
+    title: 'Dar Zitoun',
+    year: '2026',
+    technologies: ['Vite', 'React', 'TypeScript', 'Tailwind CSS', 'React Router'],
+    demo: 'https://dar-zitoun-six.vercel.app',
+    images: ['/projects/dar-zitoun/01.png', '/projects/dar-zitoun/02.png'],
+  },
+  {
+    id: 'syllabug',
+    title: 'Syllabug',
+    year: '2026',
+    technologies: ['Next.js', 'PostgreSQL', 'Vercel'],
+    demo: 'https://syllabug-blue.vercel.app',
+    images: ['/projects/syllabug/01.png', '/projects/syllabug/02.png'],
+    guestHint: true,
+    demoAccounts: [
+      { label: 'Sara', email: 'sara@syllabug.dev', password: 'Sara!2026demo' },
+      { label: 'Youssef', email: 'youssef@syllabug.dev', password: 'Youssef!2026demo' },
+    ],
+  },
+  {
+    id: 'webgency',
+    title: 'Webgency',
+    year: '2026',
+    technologies: ['WordPress', 'Elementor', 'Vercel'],
+    demo: 'https://webgency-dusky.vercel.app',
+    images: ['/projects/webgency/01.png', '/projects/webgency/02.png'],
+  },
+  {
+    id: 'ghoriani',
+    title: 'Ghoriani portfolio',
+    year: '2026',
+    technologies: ['Next.js', 'GSAP', 'Lenis'],
+  },
   {
     id: 'observer',
     title: 'Observer',
@@ -30,6 +84,12 @@ const projects: Project[] = [
     technologies: ['NestJS', 'React', 'MongoDB', 'Jest', 'Docker'],
     github: 'https://github.com/HIBA-BEG/Wellness-Warriors-Service',
     extra: { label: 'client', href: 'https://github.com/HIBA-BEG/Wellness-Warriors-Client' },
+    demo: 'https://wellness-warriors-client.vercel.app',
+    images: ['/projects/wellness/01.png', '/projects/wellness/02.png', '/projects/wellness/03.png'],
+    demoAccounts: [
+      { label: 'organizer', email: 'organizer@wellnesswarriors.demo', password: 'OrganizerDemo123!' },
+      { label: 'participant', email: 'amina.bennani@wellnesswarriors.demo', password: 'ParticipantDemo123!' },
+    ],
   },
   {
     id: 'quickconnect',
@@ -98,8 +158,40 @@ const projects: Project[] = [
   },
 ];
 
+function detailLines(id: ProjectId, copy: Copy): readonly string[] {
+  const details = copy.projects.details;
+  if (id === 'maisonNoire' || id === 'darZitoun' || id === 'syllabug' || id === 'webgency' || id === 'ghoriani') return details[id];
+  return [];
+}
+
 const Projects = () => {
   const { copy } = useI18n();
+  const [openId, setOpenId] = useState<ProjectId | null>(null);
+  const close = useCallback(() => setOpenId(null), []);
+
+  const active = projects.find((item) => item.id === openId) ?? null;
+  const dialog: ProjectDialog | null = active
+    ? {
+        id: active.id,
+        title: active.title,
+        year: active.year,
+        technologies: active.technologies,
+        demo: active.demo,
+        images: active.images ?? [],
+        description: copy.projects.descriptions[active.id],
+        details: detailLines(active.id, copy),
+        guestHint: active.guestHint,
+        demoAccounts: active.demoAccounts?.map((account) => ({
+          ...account,
+          label:
+            account.label === 'organizer'
+              ? copy.projects.roles.organizer
+              : account.label === 'participant'
+                ? copy.projects.roles.participant
+                : account.label,
+        })),
+      }
+    : null;
 
   return (
     <section id="projects" className="px-6 py-20">
@@ -112,12 +204,23 @@ const Projects = () => {
         <div className="mt-12 grid gap-6 lg:grid-cols-3">
           {projects.map((project, index) => (
             <motion.article
-              key={project.title}
+              key={project.id}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: Math.min(index, 6) * 0.06 }}
-              className="glass flex flex-col rounded-2xl p-6 shadow-[0_0_0_1px_rgba(255,77,141,0.15)] transition hover:shadow-[0_0_30px_rgba(255,77,141,0.25)]"
+              tabIndex={0}
+              aria-haspopup="dialog"
+              aria-label={copy.projects.open.replace('{title}', project.title)}
+              onClick={() => setOpenId(project.id)}
+              onKeyDown={(event) => {
+                if (event.target !== event.currentTarget) return;
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setOpenId(project.id);
+                }
+              }}
+              className="glass flex cursor-pointer flex-col rounded-2xl p-6 shadow-[0_0_0_1px_rgba(255,77,141,0.15)] outline-none transition hover:shadow-[0_0_30px_rgba(255,77,141,0.25)] focus-visible:ring-2 focus-visible:ring-blush"
             >
               {project.year && (
                 <p className="text-sm font-semibold tracking-[0.18em] text-blush">{project.year}</p>
@@ -131,6 +234,7 @@ const Projects = () => {
                   </span>
                 ))}
               </div>
+              {/* GitHub button and Client / Server / API hidden for now.
               <div className="mt-6 flex flex-wrap gap-3">
                 <a
                   href={project.github}
@@ -151,10 +255,25 @@ const Projects = () => {
                   </a>
                 )}
               </div>
+              */}
+              {project.demo && (
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noreferrer"
+                    onClick={(event) => event.stopPropagation()}
+                    className="rounded-full bg-blush px-5 py-2 text-sm font-semibold text-white hover:bg-blush-deep"
+                  >
+                    {copy.projects.live}
+                  </a>
+                </div>
+              )}
             </motion.article>
           ))}
         </div>
       </div>
+      <ProjectModal project={dialog} onClose={close} />
     </section>
   );
 };

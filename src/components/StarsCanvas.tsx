@@ -37,7 +37,7 @@ const Stars = ({ paused }: { paused: boolean }) => {
 
 const StarsCanvas = () => {
   const { theme, motionPaused } = useTheme();
-  // light mode has its own background. stars would just paint over it
+  // light mode has its own background
   if (theme === "light") return null;
 
   return (

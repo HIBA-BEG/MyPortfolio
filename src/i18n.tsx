@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 export type Locale = 'en' | 'fr';
 
-// all the visible text. english unless someone hits FR, then it's saved as localStorage "lang"
+// default language is English unless someone switches to FR, then it's saved as localStorage "lang"
 const copy = {
   en: {
     metaTitle: 'Hiba BEGHDI — QA Analyst & Full-Stack Developer',
@@ -30,7 +30,7 @@ const copy = {
     hero: {
       available: 'Available',
       greeting: "Hi, I'm",
-      role: '< QA Analyst >',
+      role: '< QA Analyst + Developer >',
       engineer: 'Engineer in the making',
       bio: 'Manual and automated testing, with a full-stack background in React, NestJS, and Laravel. Based in Morocco. Available immediately.',
       years: 'Years',
@@ -97,12 +97,30 @@ const copy = {
     projects: {
       lead: 'My ',
       accent: 'Projects',
-      intro: 'GitHub is linked on each card. A live demo can be added once that project is deployed.',
+      intro: 'Open a card to read the details. A live demo is shown when the project is deployed.',
       github: 'GitHub',
       client: 'Client',
       server: 'Server',
       api: 'API',
+      live: 'Live demo',
+      close: 'Close',
+      noShots: 'No screenshots for this project yet.',
+      open: 'Open details for {title}',
+      demoAccounts: 'Demo accounts',
+      demoNote: 'Public demo logins, so you can try the app without registering.',
+      guestHint: 'Or choose Try without an account. Guest data stays in this browser.',
+      roles: { organizer: 'Organizer', participant: 'Participant' },
       descriptions: {
+        maisonNoire:
+          'Fine-dining restaurant demo: dark gold UI, six-course tasting menu, wine list, chef page, and a reservation flow with live estimate. Front-end only, fictional restaurant, live on Vercel.',
+        darZitoun:
+          'Moroccan restaurant demo set in a Rabat riad: warm terracotta and gold, menu in MAD, gallery, story, reservation and contact. Front-end only, fictional restaurant, live on Vercel.',
+        syllabug:
+          'ISTQB CTFL v4.0 study app: chapters, daily quiz, mistake review, mock exams, guest mode and accounts, FR/EN, themes. Live on Vercel.',
+        webgency:
+          'Agency marketing site for entrepreneurs and SMEs: services, social proof, FAQ. Live on Vercel.',
+        ghoriani:
+          'Client portfolio for a photographer and filmmaker, in French and English. The live demo is not published yet.',
         observer:
           'Mobile event app with Admin, Organizer, and Participant roles. About 100 Jest unit tests, GitHub Actions CI with a Docker build, and an API documented in Postman.',
         wellness:
@@ -119,6 +137,33 @@ const copy = {
         evento: 'Event management and seat reservation.',
         dar: 'Youth-center management app, built as a first-year capstone.',
         maroc: 'Morocco travel app with a React interface and a separate REST API.',
+      },
+      details: {
+        maisonNoire: [
+          'Six-course tasting menu with optional wine pairing.',
+          'Wine list in tabs, chef page, reservation with validation.',
+          'Vite, React, TypeScript, Tailwind, framer-motion. Deployed on Vercel.',
+        ],
+        darZitoun: [
+          'Menu with tabs, gallery lightbox, story, reservation and contact.',
+          'Warm palette, zellige-inspired layout, prices in MAD.',
+          'Vite, React, TypeScript, Tailwind, React Router. Deployed on Vercel.',
+        ],
+        syllabug: [
+          'Chapters follow the ISTQB CTFL v4.0 syllabus.',
+          'Daily quiz, mistake review, and mock exams.',
+          'Guest mode or an account, in French and English, with themes.',
+        ],
+        webgency: [
+          'Services presented for entrepreneurs and SMEs.',
+          'Social proof and an FAQ on the same site.',
+          'Built with WordPress and Elementor, deployed on Vercel.',
+        ],
+        ghoriani: [
+          'Client site for a photographer and filmmaker.',
+          'The pages are available in French and English.',
+          'Motion uses GSAP, and scrolling uses Lenis.',
+        ],
       },
     },
     education: {
@@ -185,8 +230,8 @@ const copy = {
     hero: {
       available: 'Disponible',
       greeting: 'Je suis',
-      role: '< Analyste QA >',
-      engineer: 'Ingénieure en devenir',
+      role: '< Analyste QA + Développeuse >',
+      engineer: 'Future ingénieure',
       bio: 'Tests manuels et automatisés, avec une base full-stack en React, NestJS et Laravel. Basée au Maroc. Disponible immédiatement.',
       years: 'Années',
       repos: 'Dépôts GitHub',
@@ -252,12 +297,30 @@ const copy = {
     projects: {
       lead: 'Mes ',
       accent: 'projets',
-      intro: 'Chaque carte renvoie vers GitHub. Une démo en ligne pourra être ajoutée une fois le projet déployé.',
+      intro: 'Ouvrez une carte pour lire le détail. Une démo en ligne s’affiche quand le projet est déployé.',
       github: 'GitHub',
       client: 'Client',
       server: 'Serveur',
       api: 'API',
+      live: 'Démo en ligne',
+      close: 'Fermer',
+      noShots: 'Pas encore de captures pour ce projet.',
+      open: 'Ouvrir le détail de {title}',
+      demoAccounts: 'Comptes démo',
+      demoNote: 'Comptes démo publics, pour essayer l’application sans inscription.',
+      guestHint: 'Ou choisissez Essayer sans compte. Les données invité restent dans ce navigateur.',
+      roles: { organizer: 'Organisateur', participant: 'Participant' },
       descriptions: {
+        maisonNoire:
+          'Démo restaurant gastronomique: UI sombre et or, menu dégustation en six plats, carte des vins, page chef, et réservation avec estimation. Front-end only, restaurant fictif, en ligne sur Vercel.',
+        darZitoun:
+          'Démo restaurant marocain dans un riad à Rabat: terracotta et or, menu en MAD, galerie, histoire, réservation et contact. Front-end only, restaurant fictif, en ligne sur Vercel.',
+        syllabug:
+          'Application de révision ISTQB CTFL v4.0 : chapitres, quiz du jour, revue des erreurs, examens blancs, mode invité et comptes, FR/EN, thèmes. En ligne sur Vercel.',
+        webgency:
+          'Site vitrine d’une agence pour les entrepreneurs et les PME : services, preuves sociales, FAQ. En ligne sur Vercel.',
+        ghoriani:
+          'Portfolio client d’un photographe et réalisateur, en français et en anglais. La démo en ligne n’est pas encore publiée.',
         observer:
           "Application mobile d'événements avec les rôles Admin, Organisateur et Participant. Environ 100 tests unitaires Jest, une CI GitHub Actions avec build Docker, et une API documentée dans Postman.",
         wellness:
@@ -276,6 +339,33 @@ const copy = {
         evento: "Gestion d'événements et réservation de places.",
         dar: 'Application de gestion d’un centre de jeunesse, projet de fin de première année.',
         maroc: 'Application de voyage au Maroc, avec une interface React et une API REST séparée.',
+      },
+      details: {
+        maisonNoire: [
+          'Menu dégustation en six plats avec accord mets-vins optionnel.',
+          'Carte des vins en onglets, page chef, réservation avec validation.',
+          'Vite, React, TypeScript, Tailwind, framer-motion. Déployé sur Vercel.',
+        ],
+        darZitoun: [
+          'Menu en onglets, galerie lightbox, histoire, réservation et contact.',
+          'Palette chaude, ambiance riad, prix en MAD.',
+          'Vite, React, TypeScript, Tailwind, React Router. Déployé sur Vercel.',
+        ],
+        syllabug: [
+          'Chapitres alignés sur le syllabus ISTQB CTFL v4.0.',
+          'Quiz du jour, revue des erreurs et examens blancs.',
+          'Mode invité ou compte, en français et en anglais, avec des thèmes.',
+        ],
+        webgency: [
+          'Services présentés pour les entrepreneurs et les PME.',
+          'Preuves sociales et une FAQ sur le même site.',
+          'Réalisé avec WordPress et Elementor, déployé sur Vercel.',
+        ],
+        ghoriani: [
+          'Site client pour un photographe et réalisateur.',
+          'Les pages sont disponibles en français et en anglais.',
+          'Les animations utilisent GSAP, et le défilement utilise Lenis.',
+        ],
       },
     },
     education: {
