@@ -5,9 +5,9 @@ export type Locale = 'en' | 'fr';
 // default language is English unless someone switches to FR, then it's saved as localStorage "lang"
 const copy = {
   en: {
-    metaTitle: 'Hiba BEGHDI — QA Analyst & Full-Stack Developer',
+    metaTitle: 'Hiba Beghdi | QA Analyst and Web Developer in Safi',
     metaDescription:
-      'Hiba BEGHDI — QA analyst and full-stack developer based in Rabat. Manual and automated testing, React, NestJS, and Laravel.',
+      'Hiba Beghdi, QA analyst and web developer in Safi, Morocco. Manual and automated testing, React, NestJS, and Laravel.',
     nav: {
       home: 'Home',
       about: 'About',
@@ -205,9 +205,9 @@ const copy = {
     },
   },
   fr: {
-    metaTitle: 'Hiba BEGHDI — Analyste QA et développeuse full-stack',
+    metaTitle: 'Hiba Beghdi | Analyste QA et développeuse web à Safi',
     metaDescription:
-      'Hiba BEGHDI — analyste QA et développeuse full-stack basée à Rabat. Tests manuels et automatisés, React, NestJS et Laravel.',
+      'Hiba Beghdi, analyste QA et développeuse web à Safi, au Maroc. Tests manuels et automatisés, React, NestJS et Laravel.',
     nav: {
       home: 'Accueil',
       about: 'À propos',
@@ -431,10 +431,18 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   const [locale, setLocale] = useState<Locale>(readLocale);
 
   useEffect(() => {
+    const meta = copy[locale];
     document.documentElement.lang = locale;
-    document.title = copy[locale].metaTitle;
-    const description = document.querySelector('meta[name="description"]');
-    if (description) description.setAttribute('content', copy[locale].metaDescription);
+    document.title = meta.metaTitle;
+    const setContent = (selector: string, value: string) => {
+      document.querySelector(selector)?.setAttribute('content', value);
+    };
+    setContent('meta[name="description"]', meta.metaDescription);
+    setContent('meta[property="og:title"]', meta.metaTitle);
+    setContent('meta[property="og:description"]', meta.metaDescription);
+    setContent('meta[property="og:locale"]', locale === 'fr' ? 'fr_FR' : 'en_US');
+    setContent('meta[name="twitter:title"]', meta.metaTitle);
+    setContent('meta[name="twitter:description"]', meta.metaDescription);
     localStorage.setItem('lang', locale);
   }, [locale]);
 

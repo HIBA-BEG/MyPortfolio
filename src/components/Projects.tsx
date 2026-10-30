@@ -49,7 +49,7 @@ const projects: Project[] = [
     year: '2026',
     technologies: ['Next.js', 'PostgreSQL', 'Vercel'],
     demo: 'https://syllabug-blue.vercel.app',
-    images: ['/projects/syllabug/01.png', '/projects/syllabug/02.png'],
+    images: ['/projects/syllabug/01.png', '/projects/syllabug/02.png', '/projects/syllabug/03.png'],
     guestHint: true,
     demoAccounts: [
       { label: 'Sara', email: 'sara@syllabug.dev', password: 'Sara!2026demo' },

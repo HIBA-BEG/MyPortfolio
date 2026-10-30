@@ -67,7 +67,7 @@ const Hero = () => {
           <span className="ring-spin ring-spin-3 absolute inset-8" />
           <img
             src="/hiba3.png"
-            alt="Hiba BEGHDI"
+            alt="Hiba Beghdi"
             className="absolute left-1/2 top-1/2 h-[68%] w-[68%] -translate-x-1/2 -translate-y-1/2 rounded-full object-cover object-[center_18%] shadow-[0_0_40px_rgba(255,77,141,0.35)]"
           />
         </motion.div>
